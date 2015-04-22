@@ -1,13 +1,38 @@
 @startuml
 
-abstract class Activity {
+package android{
+ abstract class Activity
+ abstract class View
+ class Button
+ class TextView
 }
-abstract class View
+
+View <|-- Button
+View <|-- TextView
 
 class CounterActivity {
+ counter : int
  onCreate(Bundle)
 }
 
-CounterActivity -up-|> Activity
+Activity <|-- CounterActivity
+
+class BallView {
+  setPosition(int)
+  setOnDropListener(...)
+}
+
+View <|-- BallView
+
+Button --* CounterActivity : inc
+Button --* CounterActivity : dec
+TextView --* CounterActivity : ctr
+BallView --* CounterActivity : ball
+
+interface OnDropListener {
+  onDrop(int)
+}
+OnDropListener --+ BallView
+
 
 @enduml
