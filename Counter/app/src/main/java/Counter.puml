@@ -1,0 +1,13 @@
+@startuml
+
+abstract class Activity {
+}
+abstract class View
+
+class CounterActivity {
+ onCreate(Bundle)
+}
+
+CounterActivity -up-|> Activity
+
+@enduml

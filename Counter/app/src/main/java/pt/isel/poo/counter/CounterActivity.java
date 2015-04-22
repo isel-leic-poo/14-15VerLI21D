@@ -49,10 +49,16 @@ public class CounterActivity extends Activity {
                 --counter; updateView();
             }
         });
+        ball.setOnDropListener(new BallView.OnDropListener() {
+            public void onDrop(int deltaX) {
+                counter = deltaX/10; updateView();
+            }
+        });
         setContentView(root);
     }
 
     private void updateView() {
         ctr.setText(String.valueOf(counter));
+        ball.setPosition(counter*10);
     }
 }
