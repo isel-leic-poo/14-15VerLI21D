@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 public class CounterActivity extends Activity {
 
     private Button inc, dec;
@@ -60,5 +65,24 @@ public class CounterActivity extends Activity {
     private void updateView() {
         ctr.setText(String.valueOf(counter));
         ball.setPosition(counter*10);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveFile();
+    }
+
+    private void saveFile() {
+        try {
+            OutputStream out = openFileOutput("counter.txt",MODE_PRIVATE);
+            OutputStreamWriter dout = new OutputStreamWriter(out);
+            BufferedWriter bout = new BufferedWriter(dout);
+            bout.write(""+counter);
+            bout.newLine();
+            bout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
