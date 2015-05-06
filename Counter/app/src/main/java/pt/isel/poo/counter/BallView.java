@@ -16,21 +16,21 @@ public class BallView extends View {
     }
 
     private Paint paint = new Paint();
-    private int centerX;
+    private int deltaX = 0;                  // use if centerX==MAX_VALUE
+    private int centerX = Integer.MAX_VALUE; // used only if !=MAX_VALUE
     private boolean firstCall = true;
 
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (firstCall) {
-            setPosition(0);
-            firstCall = false;
-        }
+        if (centerX==Integer.MAX_VALUE)
+            centerX = getWidth()/2 + deltaX;
         canvas.drawCircle(centerX,getHeight()/2,100,paint);
     }
 
     public void setPosition(int deltaX) {
-        centerX = getWidth()/2 + deltaX;
+        this.deltaX = deltaX;
+        centerX = Integer.MAX_VALUE;
         invalidate();
     }
 
