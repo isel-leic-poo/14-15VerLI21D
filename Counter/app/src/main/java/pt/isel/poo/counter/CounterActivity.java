@@ -32,41 +32,25 @@ public class CounterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinearLayout buttons = new LinearLayout(this);
-        buttons.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
+        //setContentView(initLayout());
+        setContentView(R.layout.counter_layout);
+        save = (Button) findViewById(R.id.save);
+        load = (Button) findViewById(R.id.load);
+        inc = (Button) findViewById(R.id.inc);
+        dec = (Button) findViewById(R.id.dec);
+        ctr = (TextView) findViewById(R.id.ctr);
+        ball = (BallView) findViewById(R.id.ball);
 
-        inc = new Button(this);
-        inc.setText("+");
-        dec = new Button(this);
-        dec.setText("-");
-        ctr = new TextView(this);
-        ctr.setText("0");
-        ctr.setTextSize(100);
-        ctr.setGravity(Gravity.CENTER);
-        ctr.setBackgroundColor(Color.YELLOW);
-        ball = new BallView(this);
-
-        save = new TxtButton("Save",buttons,new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                    showDialog(true);
+                showDialog(true);
             }
         });
-        load = new TxtButton("Load",buttons,new View.OnClickListener() {
+        load.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                    showDialog(false);
+                showDialog(false);
             }
         });
-        //BUG: Aqui só era criado 1 objecto EditText para todas as dialog.
-        //fileName = new EditText(this);
-
-        root.addView(buttons);
-        root.addView(inc);
-        root.addView(ctr);
-        root.addView(dec);
-        root.addView(ball);
-
         inc.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ++counter;
@@ -85,7 +69,32 @@ public class CounterActivity extends Activity {
                 updateView();
             }
         });
-        setContentView(root);
+    }
+
+    private LinearLayout initLayout() {
+        LinearLayout buttons = new LinearLayout(this);
+        buttons.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+
+        inc = new Button(this);
+        inc.setText("+");
+        dec = new Button(this);
+        dec.setText("-");
+        ctr = new TextView(this);
+        ctr.setText("0");
+        ctr.setTextSize(100);
+        ctr.setGravity(Gravity.CENTER);
+        ctr.setBackgroundColor(Color.YELLOW);
+        ball = new BallView(this);
+        root.addView(buttons);
+        root.addView(inc);
+        root.addView(ctr);
+        root.addView(dec);
+        root.addView(ball);
+        save = new TxtButton("Save",buttons);
+        load = new TxtButton("Load",buttons);
+        return root;
     }
 
     private void updateView() {
@@ -108,7 +117,6 @@ public class CounterActivity extends Activity {
         //saveFile();
     }
 
-
     private void saveFile(String fileName) {
         try {
             OutputStream out = openFileOutput(fileName,MODE_PRIVATE);
@@ -119,6 +127,7 @@ public class CounterActivity extends Activity {
             e.printStackTrace();
         }
     }
+
     private void loadFile(String fileName) {
         try {
             InputStream in = openFileInput(fileName);
@@ -132,10 +141,9 @@ public class CounterActivity extends Activity {
     }
 
     private class TxtButton extends Button {
-        public TxtButton(String txt, ViewGroup root, OnClickListener listener) {
+        public TxtButton(String txt, ViewGroup root) {
             super(getApplicationContext());
             setText(txt);
-            setOnClickListener(listener);
             root.addView(this);
         }
     }
