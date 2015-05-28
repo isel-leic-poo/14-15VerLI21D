@@ -8,11 +8,11 @@
         android:layout_width="match_parent" android:layout_height="wrap_content">
 
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="SAVE"
+            android:text="@string/save"
             android:id="@+id/save" />
 
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="LOAD"
+            android:text="@string/load"
             android:id="@+id/load" />
 
     </LinearLayout>

@@ -3,14 +3,10 @@ package pt.isel.poo.counter;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,32 +67,6 @@ public class CounterActivity extends Activity {
         });
     }
 
-    private LinearLayout initLayout() {
-        LinearLayout buttons = new LinearLayout(this);
-        buttons.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-
-        inc = new Button(this);
-        inc.setText("+");
-        dec = new Button(this);
-        dec.setText("-");
-        ctr = new TextView(this);
-        ctr.setText("0");
-        ctr.setTextSize(100);
-        ctr.setGravity(Gravity.CENTER);
-        ctr.setBackgroundColor(Color.YELLOW);
-        ball = new BallView(this);
-        root.addView(buttons);
-        root.addView(inc);
-        root.addView(ctr);
-        root.addView(dec);
-        root.addView(ball);
-        save = new TxtButton("Save",buttons);
-        load = new TxtButton("Load",buttons);
-        return root;
-    }
-
     private void updateView() {
         ctr.setText(String.valueOf(counter));
         ball.setPosition(counter * 10);
@@ -136,15 +106,7 @@ public class CounterActivity extends Activity {
             updateView();
             tin.close();
         } catch (FileNotFoundException e) {
-            Toast.makeText(this,"Error loading file",Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private class TxtButton extends Button {
-        public TxtButton(String txt, ViewGroup root) {
-            super(getApplicationContext());
-            setText(txt);
-            root.addView(this);
+            Toast.makeText(this,getString(R.string.file_error),Toast.LENGTH_LONG).show();
         }
     }
 

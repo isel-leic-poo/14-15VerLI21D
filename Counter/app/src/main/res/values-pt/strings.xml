@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Contador</string>
+    <string name="load">Carregar</string>
+    <string name="save">Gravar</string>
+    <string name="file_error">Erro ao carregar o ficheiro</string>
+</resources>
