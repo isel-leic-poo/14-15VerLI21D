@@ -91,6 +91,8 @@ public class C4Activity extends ActionBarActivity implements OnTileTouchListener
     public void onFinish(Object tag) {
         Point pos = (Point) tag;
         int x = pos.x, y = pos.y+1;
+        if (y>=panel.getHeightInTiles())
+            return;
         Piece p = (Piece) panel.getTile(x, y);
         if (p!=null)
             anim.exitTile(x,y,x,panel.getHeightInTiles(),200);
