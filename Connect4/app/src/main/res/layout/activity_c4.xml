@@ -10,6 +10,23 @@
     android:orientation="vertical"
     android:id="@+id/root">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/player"
+            android:textSize="30dp"/>
+
+        <pt.isel.poo.connect4.view.PieceView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/player"
+            />
+    </LinearLayout>
+
     <pt.isel.poo.lib.tile.TilePanel
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

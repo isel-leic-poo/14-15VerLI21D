@@ -6,28 +6,58 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+import pt.isel.poo.connect4.model.Connect4;
+import pt.isel.poo.connect4.model.OnChangeListener;
+import pt.isel.poo.connect4.model.Player;
 import pt.isel.poo.connect4.view.Piece;
+import pt.isel.poo.connect4.view.PieceView;
 import pt.isel.poo.lib.tile.Animator;
 import pt.isel.poo.lib.tile.OnFinishAnimationListener;
 import pt.isel.poo.lib.tile.OnTileTouchListener;
 import pt.isel.poo.lib.tile.TilePanel;
 
 
-public class C4Activity extends ActionBarActivity implements OnTileTouchListener, OnFinishAnimationListener {
-
+public class C4Activity extends ActionBarActivity implements OnTileTouchListener, OnFinishAnimationListener, OnChangeListener {
+    /* VIEW */
     TilePanel panel;
     Animator anim;
+    PieceView player;
+    /* MODEL */
+    Connect4 model = new Connect4();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_c4);
         panel = (TilePanel) findViewById(R.id.panel);
+        player = (PieceView) findViewById(R.id.player);
 
-        panel.setTile(2, 3, new Piece());
         panel.setListener(this);
         anim = panel.getAnimator();
+
+        initState();
+        model.setOnChangeListener(this);
+    }
+
+    private void initState() {
+        try {
+            Scanner in = new Scanner(getAssets().open("initState.txt"));
+            int moves = in.nextInt();
+            in.nextLine();
+            for (; moves>0 ; --moves)
+                model.dropPiece(in.nextInt());
+            updateView();
+            in.close();
+        } catch (IOException e) {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -55,6 +85,11 @@ public class C4Activity extends ActionBarActivity implements OnTileTouchListener
 
     @Override
     public boolean onClick(int x, int y) {
+        if (model.dropPiece(x)) {
+            //updateView();
+            return true;
+        }
+        /*
         Piece p = (Piece) panel.getTile(x, y);
         if (p==null) {
             anim.entryTile(x, -1, x, y, (y+1) * 200, new Piece());
@@ -65,7 +100,17 @@ public class C4Activity extends ActionBarActivity implements OnTileTouchListener
             p.toggleSelect();
             panel.invalidate(x,y);
         }
+        */
         return false;
+    }
+
+    private void updateView() {
+        for (int x = 0; x < Connect4.COLS; x++) {
+            for (int y = 0; y < Connect4.LINES; y++) {
+                panel.setTile(x,y,Piece.valueOf(model.getPlayer(x,y)));
+            }
+        }
+        player.setPiece(Piece.valueOf(model.getCurrentPlayer()));
     }
 
     @Override
@@ -96,5 +141,11 @@ public class C4Activity extends ActionBarActivity implements OnTileTouchListener
         Piece p = (Piece) panel.getTile(x, y);
         if (p!=null)
             anim.exitTile(x,y,x,panel.getHeightInTiles(),200);
+    }
+
+    @Override
+    public void onDrop(int x, int y, Player p) {
+        anim.entryTile(x,-1,x,y,200*(y+1),Piece.valueOf(p));
+        player.setPiece(Piece.valueOf(model.getCurrentPlayer()));
     }
 }
