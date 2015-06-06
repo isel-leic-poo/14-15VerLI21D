@@ -12,6 +12,7 @@ public class Connect4 {
 
     private Player[][] grid = new Player[COLS][LINES];
     private Player currPlayer = Player.A;
+    private boolean emptyGame = true;
     private OnChangeListener changeListener;
 
     public boolean dropPiece(int col) {
@@ -21,6 +22,7 @@ public class Connect4 {
             ;
         grid[col][y] = currPlayer;
         currPlayer = currPlayer.other();
+        emptyGame = false;
         if (changeListener!=null)
             changeListener.onDrop(col,y,grid[col][y]);
         return true;
@@ -41,4 +43,6 @@ public class Connect4 {
     public void setOnChangeListener(OnChangeListener onChangeListener) {
         changeListener = onChangeListener;
     }
+
+    public boolean isEmptyGame() { return emptyGame; }
 }
