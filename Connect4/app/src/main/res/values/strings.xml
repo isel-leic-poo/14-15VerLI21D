@@ -3,4 +3,10 @@
 
     <string name="action_settings">Settings</string>
     <string name="player">Player:</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="newGame">New Game</string>
+    <string name="thoth">Class site</string>
+    <string name="continueGame">Continue last game</string>
 </resources>

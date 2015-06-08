@@ -1,5 +1,6 @@
 package pt.isel.poo.connect4;
 
+import android.content.Intent;
 import android.graphics.Point;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,9 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Scanner;
 
 import pt.isel.poo.connect4.model.Connect4;
@@ -25,6 +30,7 @@ import pt.isel.poo.lib.tile.TilePanel;
 
 
 public class C4Activity extends ActionBarActivity implements OnTileTouchListener, OnFinishAnimationListener, OnChangeListener {
+    public static final String LAST_GAME = "LAST_GAME";
     /* VIEW */
     TilePanel panel;
     Animator anim;
@@ -42,8 +48,29 @@ public class C4Activity extends ActionBarActivity implements OnTileTouchListener
         panel.setListener(this);
         anim = panel.getAnimator();
 
-        initState();
+        Intent it = getIntent();
+        if ( it.getBooleanExtra(MainActivity.LAST_GAME_KEY,false)){
+            Toast.makeText(this,"LAST_GAME",Toast.LENGTH_LONG).show();
+            try ( Reader in = new InputStreamReader( openFileInput(LAST_GAME) ) ) {
+                model.load(in);
+                updateView();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //initState();
         model.setOnChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause(); // Na aula esqueci-me de fazer esta chamada.
+        try (Writer out = new OutputStreamWriter(openFileOutput(LAST_GAME, MODE_PRIVATE))) {
+            model.save(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initState() {
